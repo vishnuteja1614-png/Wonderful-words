@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌲 Whispering Woods · 1000 page reader with logo & ambient music</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Segoe UI', Roboto, system-ui, sans-serif;
+        }
+        body {
+            background: radial-gradient(circle at 10% 30%, #1d4d3a, #0f2f20);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .audiobook {
+            max-width: 1200px;
+            width: 100%;
+            background: rgba(255, 250, 235, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 64px 64px 48px 48px;
+            box-shadow: 0 30px 50px rgba(0, 20, 0, 0.7), 0 0 0 2px #d8c9a3 inset;
+            padding: 30px 35px;
+            border: 4px solid #a6b38c;
+        }
+        .header {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            background: #cdbb8b;
+            padding: 12px 28px;
+            border-radius: 80px;
+            margin-bottom: 28px;
+            box-shadow: 0 8px 0 #7f905c;
+        }
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .logo-svg {
+            width: 60px;
+            height: 60px;
+            filter: drop-shadow(2px 4px 4px #3b5a3b);
+        }
+        .header h2 {
+            font-size: 2.2rem;
+            font-weight: 500;
+            color: #1d4529;
+            letter-spacing: 1px;
+            text-shadow: 2px 2px 0 #efdeaa;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .header h2 span {
+            background: #3f673f;
+            color: #fcf2bf;
+            font-size: 1.6rem;
+            padding: 6px 22px;
+            border-radius: 60px;
+        }
+        .nav {
+            display: flex;
+            gap: 15px;
+            background: #aa9f74;
+            padding: 8px 18px;
+            border-radius: 70px;
+            align-items: center;
+        }
+        .nav button {
+            background: #fbefcb;
+            border: none;
+            width: 52px;
+            height: 52px;
+            font-size: 32px;
+            font-weight: bold;
+            border-radius: 50px;
+            color: #2b5a2b;
+            cursor: pointer;
+            box-shadow: 0 6px 0 #7f6f42, 0 8px 12px rgba(0,0,0,0.3);
+            transition: 0.07s;
+            line-height: 1;
+        }
+        .nav button:active {
+            transform: translateY(6px);
+            box-shadow: 0 1px 0 #7f6f42, 0 8px 12px black;
+        }
+        .nav input {
+            width: 90px;
+            height: 52px;
+            text-align: center;
+            font-size: 1.9rem;
+            font-weight: 700;
+            border: 4px solid #4d704d;
+            border-radius: 50px;
+            background: #fdf5df;
+            color: #1d401d;
+        }
+        .nav span {
+            font-size: 1.9rem;
+            font-weight: 600;
+            color: #1e3721;
+        }
+        .page-area {
+            background: #faeed3;
+            background-image: linear-gradient(165deg, #fff1d6 0%, #f7e5c2 100%);
+            border-radius: 56px;
+            padding: 35px 45px;
+            margin: 15px 0 30px;
+            border: 5px solid #bc9f72;
+            box-shadow: inset 0 0 0 3px #ffefcf, 0 20px 30px #1f3e26;
+            max-height: 550px;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #9b8b5c #ecdbaa;
+        }
+        .paragraph {
+            margin-bottom: 2.3rem;
+        }
+        .word {
+            display: inline-block;
+            font-size: 1.4rem;
+            line-height: 2.1rem;
+            color: #1e3b25;
+            transition: background 0.1s ease;
+            border-radius: 8px;
+            padding: 0 2px;
+        }
+        .word.active {
+            background: #f3d876;
+            color: #1b4a1b;
+            font-weight: 500;
+            transform: scale(1.02);
+            box-shadow: 0 2px 0 #c29f4b;
+        }
+        .control-pavilion {
+            background: #b9ad7b;
+            border-radius: 90px;
+            padding: 22px 30px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px 25px;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid #607d47;
+            box-shadow: 0 12px 0 #48633b, 0 8px 15px #172818;
+        }
+        .knob-group {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: #e1d3a7;
+            padding: 8px 24px;
+            border-radius: 60px;
+            flex-wrap: wrap;
+            box-shadow: inset 0 2px 5px #9d8b5a;
+        }
+        .knob-group label {
+            font-weight: 600;
+            color: #233f23;
+            font-size: 1.2rem;
+        }
+        .knob-group input[type=range] {
+            width: 140px;
+            height: 10px;
+            background: #43734a;
+            border-radius: 20px;
+            -webkit-appearance: none;
+        }
+        .knob-group input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 26px;
+            height: 26px;
+            background: #fff4bb;
+            border-radius: 50%;
+            border: 3px solid #396339;
+            cursor: pointer;
+            box-shadow: 0 2px 6px black;
+        }
+        .action-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .action-btn {
+            background: #39653f;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 600;
+            padding: 15px 32px;
+            border-radius: 60px;
+            box-shadow: 0 8px 0 #1d3b20, 0 5px 15px #0f280f;
+            cursor: pointer;
+            transition: 0.07s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            letter-spacing: 0.5px;
+        }
+        .action-btn:active {
+            transform: translateY(8px);
+            box-shadow: 0 1px 0 #1d3b20, 0 5px 15px #0f280f;
+        }
+        .action-btn.music {
+            background: #6b4f8f;
+            box-shadow: 0 8px 0 #3f3152;
+        }
+        .action-btn.stop {
+            background: #9f6b5c;
+            box-shadow: 0 8px 0 #663f35;
+        }
+        .footer-note {
+            text-align: center;
+            margin-top: 18px;
+            color: #d7d19b;
+            font-size: 1.1rem;
+            font-weight: 400;
+        }
+    </style>
+</head>
+<body>
+<div class="audiobook">
+    <!-- header with logo SVG and new title -->
+    <div class="header">
+        <div class="logo-area">
+            <!-- custom tree logo (simple, non-copyrighted SVG) -->
+            <svg class="logo-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="50" cy="70" r="20" fill="#7D5E3A" stroke="#3F4F2B" stroke-width="4"/>
+                <polygon points="50,5 20,50 35,50 25,75 40,75 30,95 70,95 60,75 75,75 65,50 80,50 50,5" fill="#2F6B2F" stroke="#1F4720" stroke-width="3"/>
+                <circle cx="50" cy="45" r="6" fill="#F7C35C" stroke="#B37B2E" stroke-width="2"/>
+                <circle cx="32" cy="58" r="4" fill="#F7C35C" stroke="#B37B2E" stroke-width="1.5"/>
+                <circle cx="68" cy="58" r="4" fill="#F7C35C" stroke="#B37B2E" stroke-width="1.5"/>
+            </svg>
+            <h2>whispering woods <span>1000 pages</span></h2>
+        </div>
+        <div class="nav">
+            <button id="prevBtn">◀</button>
+            <input type="number" id="pageInput" min="1" max="1000" value="1">
+            <span>/1000</span>
+            <button id="nextBtn">▶</button>
+        </div>
+    </div>
+
+    <!-- main reading area -->
+    <div class="page-area" id="pageDisplay">
+        <div id="textContainer"></div>
+    </div>
+
+    <!-- control panel with all adjustments -->
+    <div class="control-pavilion">
+        <div class="knob-group">
+            <label>🗣️ pitch</label>
+            <input type="range" id="pitchSlider" min="0.5" max="2" step="0.1" value="1.0">
+        </div>
+        <div class="knob-group">
+            <label>⚡ rate</label>
+            <input type="range" id="rateSlider" min="0.5" max="1.8" step="0.1" value="1.0">
+        </div>
+        <div class="knob-group">
+            <label>🔊 voice</label>
+            <input type="range" id="voiceVolSlider" min="0" max="1" step="0.05" value="0.9">
+        </div>
+        <div class="knob-group">
+            <label>🎵 music</label>
+            <input type="range" id="musicVolSlider" min="0" max="1" step="0.05" value="0.4">
+        </div>
+        <div class="knob-group">
+            <label>💥 sfx</label>
+            <input type="range" id="sfxVolSlider" min="0" max="1" step="0.05" value="0.3">
+        </div>
+        <div class="action-row">
+            <button class="action-btn" id="playVoiceBtn">🔊 read & highlight</button>
+            <button class="action-btn stop" id="stopVoiceBtn">⏹️ stop</button>
+            <button class="action-btn music" id="toggleMusicBtn">🎹 music on</button>
+        </div>
+    </div>
+    <div class="footer-note">✨ every word unique · real‑time highlighting · ambient forest music ✨</div>
+</div>
+
+<script>
+(function() {
+    // ---------- huge word pools (simple nature & daily, no copyright) ----------
+    const nouns = [
+        "tree", "bird", "sun", "sky", "water", "flower", "grass", "cloud", "rain", "wind",
+        "mountain", "river", "lake", "ocean", "beach", "stone", "leaf", "branch", "path", "house",
+        "door", "window", "table", "chair", "cup", "plate", "food", "bread", "apple", "dog",
+        "cat", "fish", "squirrel", "bee", "butterfly", "hill", "valley", "forest", "garden",
+        "moon", "star", "morning", "evening", "baby", "mother", "father", "child", "friend", "kitchen",
+        "candle", "blanket", "pillow", "field", "meadow", "brook", "pond", "feather", "nest", "beak",
+        "cliff", "cave", "shore", "wave", "sand", "pebble", "bush", "moss", "fern", "acorn",
+        "berry", "mushroom", "shed", "barn", "fence", "gate", "creek", "swamp", "marsh", "reed",
+        "dune", "glacier", "peak", "ridge", "valley", "orchard", "vine", "blossom", "root", "twig",
+        "lantern", "basket", "bucket", "kettle", "stove", "broom", "carpet", "curtain", "cushion", "drawer"
+    ];
+    const verbs = [
+        "sits", "stands", "flies", "runs", "walks", "flows", "shines", "grows", "blooms", "sings",
+        "eats", "drinks", "sleeps", "opens", "closes", "gives", "washes", "plays", "helps", "reads",
+        "writes", "draws", "looks", "sees", "hears", "touches", "waits", "moves", "jumps", "swims",
+        "rests", "builds", "covers", "feeds", "nests", "hides", "seeks", "finds", "watches", "listens",
+        "carries", "brings", "takes", "holds", "drops", "picks", "plants", "waters", "sweeps", "dusts",
+        "peeks", "glances", "wanders", "roams", "floats", "drifts", "sparkles", "twinkles", "fades", "appears"
+    ];
+    const adjectives = [
+        "green", "blue", "bright", "soft", "warm", "cold", "fresh", "calm", "quiet", "loud",
+        "tall", "short", "small", "big", "round", "flat", "clear", "dark", "light", "dry",
+        "wet", "sweet", "sour", "ripe", "young", "old", "clean", "busy", "slow", "fast",
+        "gentle", "wild", "silent", "noisy", "peaceful", "sunny", "shady", "misty", "foggy", "windy",
+        "rocky", "sandy", "muddy", "dusty", "empty", "full", "near", "far", "high", "low",
+        "ancient", "modern", "wooden", "golden", "silver", "cozy", "crisp", "damp", "fluffy", "smooth"
+    ];
+    const adverbs = [
+        "slowly", "quickly", "gently", "happily", "quietly", "loudly", "brightly", "softly",
+        "smoothly", "suddenly", "often", "always", "never", "usually", "silently", "calmly",
+        "eagerly", "patiently", "gracefully", "swiftly", "steadily", "constantly", "occasionally",
+        "merrily", "bravely", "kindly", "warmly", "coldly", "elegantly"
+    ];
+    const places = [
+        "forest", "garden", "kitchen", "park", "yard", "hill", "beach", "riverbank", "field", "path",
+        "meadow", "balcony", "roof", "cave", "shore", "orchard", "barn", "shed", "nest", "pond",
+        "valley", "cliff", "mountain", "lake", "ocean", "desert", "plain", "canyon", "glade", "thicket",
+        "swamp", "marsh", "spring", "waterfall", "creek", "brook"
+    ];
+    const pluralNouns = [
+        "trees", "birds", "flowers", "clouds", "stars", "leaves", "stones", "houses", "cats", "dogs",
+        "squirrels", "bees", "butterflies", "mountains", "waves", "paths", "windows", "cups", "apples",
+        "berries", "mushrooms", "acorns", "feathers", "nests", "rocks", "bushes", "ferns", "mosses",
+        "blankets", "candles", "pillows", "pebbles", "twigs", "branches"
+    ];
+
+    const templates = [
+        "The [noun] [verb] [adverb].",
+        "I see a [adjective] [noun] near the [noun].",
+        "In the [place], the [noun] [verb].",
+        "Today the [noun] is very [adjective].",
+        "[noun] and [noun] are [verb] together.",
+        "We often [verb] in the [place].",
+        "The [noun] [verb] like a [noun].",
+        "There is [noun] on the [noun].",
+        "A [adjective] [noun] [verb] [preposition] the [noun].",
+        "I like to watch the [noun] [verb].",
+        "The [noun] [verb] [adverb] in the [place].",
+        "Many [plural_noun] [verb] here.",
+        "The [noun] gives us [noun].",
+        "When the sun shines, the [noun] [verb].",
+        "We can hear the [noun] [verb].",
+        "The [adjective] [noun] sits on the [noun].",
+        "Clouds [verb] [adverb] in the sky.",
+        "Water [verb] down the [noun].",
+        "The [noun] has [adjective] [plural_noun].",
+        "I feel [adjective] when I see the [noun].",
+        "Look at the [adjective] [noun] over there.",
+        "Sometimes a [noun] [verb] near our [place].",
+        "The [noun] [verb] [preposition] the [noun] all day.",
+        "We find [plural_noun] after the rain.",
+        "The [noun] [verb] [adverb] through the [place].",
+        "Quietly, the [noun] [verb] beside the [noun].",
+        "Above the [place] the [noun] [verb].",
+        "Every morning the [noun] [verb].",
+        "Among the [plural_noun] a small [noun] [verb].",
+        "Under the [noun] we saw [plural_noun]."
+    ];
+    const prepositions = ["on", "beside", "under", "above", "near", "behind", "in front of", "next to", "inside", "outside"];
+
+    // ---------- generate 1000 unique pages (5-6 paragraphs, each 5-6 sentences) ----------
+    const bookPages = new Array(1001);
+    const usedSentences = new Set();
+
+    function seededRandom(seed) {
+        return function() {
+            seed |= 0;
+            seed = (seed + 0x9e3779b9) | 0;
+            let t = Math.imul(seed ^ seed >>> 15, 0x85ebca6b);
+            t = Math.imul(t ^ t >>> 13, 0xc2b2ae35);
+            return ((t ^ t >>> 16) >>> 0) / 4294967296;
+        }
+    }
+
+    function generateUniqueSentence(seedVal) {
+        const rng = seededRandom(seedVal);
+        const tmpl = templates[Math.floor(rng() * templates.length)];
+        let s = tmpl
+            .replace(/\[noun\]/g, () => nouns[Math.floor(rng() * nouns.length)])
+            .replace(/\[verb\]/g, () => verbs[Math.floor(rng() * verbs.length)])
+            .replace(/\[adjective\]/g, () => adjectives[Math.floor(rng() * adjectives.length)])
+            .replace(/\[adverb\]/g, () => adverbs[Math.floor(rng() * adverbs.length)])
+            .replace(/\[place\]/g, () => places[Math.floor(rng() * places.length)])
+            .replace(/\[plural_noun\]/g, () => pluralNouns[Math.floor(rng() * pluralNouns.length)])
+            .replace(/\[preposition\]/g, () => prepositions[Math.floor(rng() * prepositions.length)]);
+        s = s.replace(/\[.*?\]/g, "thing");
+        return s.charAt(0).toUpperCase() + s.slice(1);
+    }
+
+    for (let p = 1; p <= 1000; p++) {
+        const paras = [];
+        const paraCount = 5 + Math.floor(Math.random() * 2); // 5-6
+        for (let par = 0; par < paraCount; par++) {
+            const sentences = [];
+            const sentCount = 5 + Math.floor(Math.random() * 2); // 5-6
+            for (let s = 0; s < sentCount; s++) {
+                let sentence, attempts = 0;
+                const baseSeed = (p * 20000 + par * 800 + s) * 7919;
+                do {
+                    sentence = generateUniqueSentence(baseSeed + attempts * 12345);
+                    attempts++;
+                    if (attempts > 400) {
+                        sentence += ' ' + attempts; // fallback uniqueness
+                        break;
+                    }
+                } while (usedSentences.has(sentence));
+                usedSentences.add(sentence);
+                sentences.push(sentence);
+            }
+            paras.push(sentences);
+        }
+        bookPages[p] = paras;
+    }
+
+    // ---------- rendering with word spans + start indices for highlighting ----------
+    let currentWordSpans = [];
+    let currentWordStarts = [];
+    let fullPlainText = '';
+    let currentPageNumber = 1;
+
+    function renderPage(pageNum) {
+        const container = document.getElementById('textContainer');
+        container.innerHTML = '';
+        currentWordSpans = [];
+        currentWordStarts = [];
+        fullPlainText = '';
+
+        const paragraphs = bookPages[pageNum];
+        if (!paragraphs) return;
+
+        let globalOffset = 0;
+
+        paragraphs.forEach((sentences, idx) => {
+            const paraDiv = document.createElement('div');
+            paraDiv.className = 'paragraph';
+
+            for (let i = 0; i < sentences.length; i++) {
+                const sentence = sentences[i];
+                const words = sentence.split(' ');
+                for (let j = 0; j < words.length; j++) {
+                    const word = words[j];
+                    const span = document.createElement('span');
+                    span.className = 'word';
+                    span.textContent = word;
+                    paraDiv.appendChild(span);
+
+                    currentWordSpans.push(span);
+                    currentWordStarts.push(globalOffset);
+                    globalOffset += word.length;
+                    fullPlainText += word;
+
+                    if (j < words.length - 1) {
+                        paraDiv.appendChild(document.createTextNode(' '));
+                        globalOffset += 1;
+                        fullPlainText += ' ';
+                    }
+                }
+                if (i < sentences.length - 1) {
+                    paraDiv.appendChild(document.createTextNode(' '));
+                    globalOffset += 1;
+                    fullPlainText += ' ';
+                }
+            }
+            container.appendChild(paraDiv);
+            if (idx < paragraphs.length - 1) {
+                const spaceText = document.createTextNode('  ');
+                paraDiv.appendChild(spaceText);
+                globalOffset += 2;
+                fullPlainText += '  ';
+            }
+        });
+    }
+
+    function clearHighlight() {
+        currentWordSpans.forEach(span => span.classList.remove('active'));
+    }
+
+    // ---------- speech synthesis with accurate highlighting ----------
+    let synth = window.speechSynthesis;
+    let speaking = false;
+    let currentUtterance = null;
+
+    function speakPage(pageNum) {
+        if (speaking) {
+            synth.cancel();
+            clearHighlight();
+        }
+        const paragraphs = bookPages[pageNum];
+        if (!paragraphs) return;
+
+        const utterance = new SpeechSynthesisUtterance(fullPlainText);
+        utterance.rate = parseFloat(document.getElementById('rateSlider').value);
+        utterance.pitch = parseFloat(document.getElementById('pitchSlider').value);
+        utterance.volume = parseFloat(document.getElementById('voiceVolSlider').value);
+        utterance.lang = 'en-US';
+
+        let voices = synth.getVoices();
+        let preferred = voices.find(v => v.lang.includes('en') && (v.name.includes('Samantha') || v.name.includes('Google UK') || v.name.includes('Natural') || v.name.includes('Daniel')));
+        if (preferred) utterance.voice = preferred;
+
+        utterance.onstart = () => {
+            speaking = true;
+            clearHighlight();
+        };
+
+        utterance.onboundary = (event) => {
+            if (event.name === 'word') {
+                const charIndex = event.charIndex;
+                for (let i = 0; i < currentWordStarts.length; i++) {
+                    const start = currentWordStarts[i];
+                    const span = currentWordSpans[i];
+                    const end = start + span.textContent.length;
+                    if (charIndex >= start && charIndex < end) {
+                        clearHighlight();
+                        span.classList.add('active');
+                        break;
+                    }
+                }
+            }
+        };
+
+        utterance.onend = () => {
+            speaking = false;
+            clearHighlight();
+        };
+        utterance.onerror = () => {
+            speaking = false;
+            clearHighlight();
+        };
+
+        currentUtterance = utterance;
+        synth.speak(utterance);
+    }
+
+    // ---------- enhanced ambient music (pentatonic melody with gentle chords) ----------
+    let audioCtx = null;
+    let musicGain = null;
+    let musicPlaying = false;
+    let musicInterval = null;
+
+    function initAudio() {
+        if (audioCtx) return;
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        musicGain = audioCtx.createGain();
+        musicGain.gain.value = parseFloat(document.getElementById('musicVolSlider').value);
+        musicGain.connect(audioCtx.destination);
+    }
+
+    function startMusic() {
+        if (!audioCtx) initAudio();
+        if (musicPlaying) return;
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        musicPlaying = true;
+
+        // gentle pentatonic pattern (C, D, E, G, A)
+        const notes = [261.63, 293.66, 329.63, 392.00, 440.00]; // C4, D4, E4, G4, A4
+        let step = 0;
+        const BPM = 100;
+        const beatTime = 60 / BPM; // 0.6 sec per beat
+
+        function playChord(baseFreq) {
+            if (!musicPlaying || !audioCtx) return;
+            // chord: root + fifth + octave (gentle)
+            [baseFreq, baseFreq * 1.5, baseFreq * 2].forEach((freq, index) => {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.value = freq;
+                // slight detune for richness
+                if (index === 1) osc.frequency.value += 0.8;
+                if (index === 2) osc.frequency.value -= 1.2;
+                gain.gain.setValueAtTime(0.02 * musicGain.gain.value, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1.2);
+                osc.connect(gain).connect(musicGain);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 1.2);
+            });
+        }
+
+        // schedule a repeating pattern
+        let patternIndex = 0;
+        musicInterval = setInterval(() => {
+            if (!musicPlaying || !audioCtx) return;
+            // pick a note from the pentatonic scale, move slowly
+            const noteIdx = patternIndex % notes.length;
+            playChord(notes[noteIdx]);
+            patternIndex++;
+        }, beatTime * 1000 * 2); // every 2 beats = 1.2 sec
+    }
+
+    function stopMusic() {
+        musicPlaying = false;
+        if (musicInterval) clearInterval(musicInterval);
+        musicInterval = null;
+    }
+
+    document.getElementById('toggleMusicBtn').addEventListener('click', (e) => {
+        if (!musicPlaying) {
+            startMusic();
+            e.target.textContent = '🎹 music off';
+        } else {
+            stopMusic();
+            e.target.textContent = '🎹 music on';
+        }
+    });
+
+    document.getElementById('musicVolSlider').addEventListener('input', (e) => {
+        if (musicGain) musicGain.gain.value = parseFloat(e.target.value);
+    });
+
+    // sfx: gentle page-turn
+    function playSfx() {
+        if (!audioCtx) initAudio();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const vol = parseFloat(document.getElementById('sfxVolSlider').value);
+        if (vol <= 0) return;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.value = 300;
+        gain.gain.value = 0.03 * vol;
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
+        osc.connect(gain).connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.1);
+    }
+
+    // ---------- navigation ----------
+    const pageInput = document.getElementById('pageInput');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const playBtn = document.getElementById('playVoiceBtn');
+    const stopBtn = document.getElementById('stopVoiceBtn');
+
+    function goToPage(newPage) {
+        if (newPage < 1) newPage = 1;
+        if (newPage > 1000) newPage = 1000;
+        if (currentPageNumber !== newPage) {
+            playSfx();
+        }
+        currentPageNumber = newPage;
+        pageInput.value = currentPageNumber;
+        renderPage(currentPageNumber);
+        if (speaking) {
+            synth.cancel();
+            speaking = false;
+            clearHighlight();
+        }
+    }
+
+    prevBtn.addEventListener('click', () => goToPage(currentPageNumber - 1));
+    nextBtn.addEventListener('click', () => goToPage(currentPageNumber + 1));
+    pageInput.addEventListener('change', () => goToPage(parseInt(pageInput.value) || 1));
+
+    playBtn.addEventListener('click', () => {
+        if (speaking) synth.cancel();
+        speakPage(currentPageNumber);
+    });
+
+    stopBtn.addEventListener('click', () => {
+        if (speaking) synth.cancel();
+        speaking = false;
+        clearHighlight();
+    });
+
+    // initial render
+    renderPage(1);
+    window.speechSynthesis.getVoices();
+})();
+</script>
+</body>
+</html>
